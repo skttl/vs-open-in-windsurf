@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <Extern href="stdidcmd.h"/>
+    <Extern href="vsshlids.h"/>
+    <Include href="KnownImageIds.vsct"/>
+
+    <Commands package="guidPackage">
+        <Buttons>
+            <Button guid="guidOpenInWindsurfCmdSet" id="OpenInWindsurf" priority="0x0500" type="Button">
+                <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_FOLDER_EXPLORE" />
+                <Icon guid="ImageCatalogGuid" id="Run" />
+                <CommandFlag>IconIsMoniker</CommandFlag>
+                <Strings>
+                    <ButtonText>Open in &amp;Windsurf</ButtonText>
+                </Strings>
+            </Button>
+            <Button guid="guidOpenCurrentInWindsurfCmdSet" id="OpenCurrentInWindsurf" priority="0x0500" type="Button">
+                <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_FILEEDITVIEW" />
+                <Icon guid="ImageCatalogGuid" id="Run" />
+                <CommandFlag>IconIsMoniker</CommandFlag>
+                <Strings>
+                    <ButtonText>Open in &amp;Windsurf</ButtonText>
+                </Strings>
+            </Button>
+        </Buttons>
+    </Commands>
+
+    <CommandPlacements>
+        <CommandPlacement guid="guidOpenInWindsurfCmdSet" id="OpenInWindsurf" priority="0x0500">
+            <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_SOLUTION_EXPLORE"/>
+        </CommandPlacement>
+        <CommandPlacement guid="guidOpenInWindsurfCmdSet" id="OpenInWindsurf" priority="0x0500">
+            <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_EXPLORE"/>
+        </CommandPlacement>
+        <CommandPlacement guid="guidOpenInWindsurfCmdSet" id="OpenInWindsurf" priority="0x0500">
+            <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_OPEN"/>
+        </CommandPlacement>
+    </CommandPlacements>
+
+    <KeyBindings>
+        <KeyBinding guid="guidOpenCurrentInWindsurfCmdSet" id="OpenCurrentInWindsurf" editor="guidVSStd97" key1="W" mod1="Control Shift"/>
+    </KeyBindings>
+
+    <Symbols>
+        <!-- This is the package guid. -->
+        <GuidSymbol name="guidPackage" value="{b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e}" />
+
+        <GuidSymbol name="guidOpenInWindsurfCmdSet" value="{c2d3e4f5-a6b7-4c8d-9e0f-1a2b3c4d5e6f}">
+            <IDSymbol name="OpenInWindsurf" value="0x0100" />
+        </GuidSymbol>
+        <GuidSymbol name="guidOpenCurrentInWindsurfCmdSet" value="{d3e4f5a6-b7c8-4d9e-0f1a-2b3c4d5e6f7a}">
+            <IDSymbol name="OpenCurrentInWindsurf" value="0x0101" />
+        </GuidSymbol>
+    </Symbols>
+</CommandTable>

@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      SolutionPath: OpenInWindsurf.sln
+      VsixManifestPath: src\source.extension.vsixmanifest
+      VsixPath: src\bin\Release\OpenInWindsurf.vsix
+      PublishManifestPath: publishManifest.json
+      Configuration: Release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore $env:SolutionPath
+
+      - name: Set VSIX version from tag
+        uses: cezarypiatek/VsixVersionAction@1.0
+        with:
+          version: ${{ github.ref_name }}
+          vsix-manifest-file: ${{ env.VsixManifestPath }}
+
+      - name: Build extension
+        run: msbuild $env:SolutionPath /t:Rebuild /p:Configuration=$env:Configuration
+        env:
+          DeployExtension: False
+
+      - name: Generate release notes
+        run: |
+          git fetch --prune --unshallow
+          $tag = git describe --tags --abbrev=0 HEAD^
+          $log = git log "$tag..HEAD" --pretty=format:"- %s"
+          "## What's new`n`n$($log -join "`n")" | Out-File release_notes.md -Encoding utf8
+
+      - name: Create GitHub release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release_notes.md
+          files: ${{ env.VsixPath }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to Visual Studio Marketplace
+        uses: cezarypiatek/VsixPublisherAction@1.2
+        with:
+          extension-file: ${{ env.VsixPath }}
+          publish-manifest-file: ${{ env.PublishManifestPath }}
+          personal-access-code: ${{ secrets.VS_PUBLISHER_ACCESS_TOKEN }}
